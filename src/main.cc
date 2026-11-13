@@ -5,51 +5,51 @@
 #include <string>
 #include <cstring>
 #include <cerrno>
+#include <netdb.h>
 
-const in_port_t http_port {htons (80)};
+#include "SocketWrapper.hh"
+
+static const in_port_t http_port {htons (5000)};
 
 int main () {
-    int sock = socket (AF_INET, SOCK_STREAM, 0); // 0 = neither cloexec or nonblock flags are set.
-    
     sockaddr_in addr {};
     addr.sin_family = AF_INET;
     addr.sin_port = http_port;
     addr.sin_addr.s_addr = INADDR_ANY;
+  
 
-    int result = bind (sock, (sockaddr*)&addr, sizeof (addr)); // TODO: Find a safer way to do this than C-style casting.
-
-    if (result == -1) {
-        std::cout << "Bind failed with error " << std::strerror(errno)<< std::endl;
+    std::optional sock {SocketWrapper::make_socket (AF_INET, SOCK_STREAM, 0)};
+    if (!sock.has_value ()) {
+        std::cout << "Could not make socket\n";
+        std::cout << strerror (errno) << "\n";
         return -1;
     }
-    result = listen (sock, 1);
-    if (result == -1) {
-        std::cout << "Listen failed." << std::endl;
+
+    SocketWrapper &s {sock.value ()};
+    
+    int res1 = s.bind ((sockaddr*)&addr, sizeof (addr));
+    if (res1 == -1) {
+        std::cout << "Error binding.\n";
+        std::cout << strerror (errno) << "\n";
         return -1;
     }
-    
-    sockaddr client_addr {};
-    socklen_t l = (socklen_t)sizeof (client_addr);
 
-    int fd =  accept (sock, &client_addr, &l);
-
-    // std::cout << "Connected. " << result << std::endl;
-
-    std::string buf {};
-    buf.reserve (100);
-    
-    while (true) {
-        ssize_t num_received = recv (fd, static_cast<void*> (&buf[0]), buf.capacity (), 0);
-        if (num_received == -1) {
-            std::cout << std::strerror (errno) << std::endl;
-            break;
-        }
-
-        if (num_received == 0)
-            continue;
-        
-        std::cout << buf << std::endl;
+    int res2 = s.listen (1);
+    if (res2 == -1) {
+        std::cout << "Listen failed.\n" << std::endl;
     }
+
+    auto candidate = s.accept ();
+    if (!candidate.has_value ()) {
+        std::cout << "Accept failed.\n";
+        std::cout << strerror (errno) << std::endl;
+        return -1;
+    }
+
+    SocketWrapper &sender = candidate.value ();
+    std::string msg = "Hello, world!";
+
+    sender.send (msg, 0);
 
     return 0;
 }
