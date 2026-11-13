@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <string_view>
 #include <sys/socket.h>
+#include <vector>
+
 
 class SocketWrapper {
 public:
@@ -23,6 +25,7 @@ public:
   std::optional<SocketWrapper> accept ();
 
   ssize_t send (std::string_view bytes, int flags);
+  ssize_t recv (std::string buf, size_t bytes, int flags);
 
 protected:
   explicit SocketWrapper (int sock_fd) : fd_ (sock_fd) {};
