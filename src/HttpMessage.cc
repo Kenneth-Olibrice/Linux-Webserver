@@ -20,6 +20,12 @@ string HttpMessage::serialize_method (const HttpMethod &method) {
     return retval;
 }
 
+// `serialize()` turns an HttpMessage object and converts it to a string of bytes
+// conforming to the message format defined in [RFFC 9112]. 
+//
+// `serialize()` performs no correctness checking and can produce 
+// a malformed HTTP message string. It is the responsibility of the caller
+// to ensure that an HttpMessage object is correct before calling `serialize()`.
 string HttpMessage::serialize () const {
     string retval {};
 
