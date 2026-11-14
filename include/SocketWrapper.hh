@@ -20,6 +20,7 @@ public:
 
   ~SocketWrapper () {close (fd_);};
 
+  int connect (const struct sockaddr *addr, socklen_t len);
   int bind (const struct sockaddr *addr, socklen_t addr_size);
   int listen (int backlog);
   std::optional<SocketWrapper> accept ();

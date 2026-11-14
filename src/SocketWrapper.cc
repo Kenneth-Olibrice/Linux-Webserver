@@ -1,4 +1,4 @@
-#include "SocketWrapper.hh"
+#include "../include/SocketWrapper.hh"
 #include <netdb.h>
 
 using namespace std;
@@ -12,6 +12,10 @@ optional<SocketWrapper> SocketWrapper::make_socket (int domain, int type, int pr
     } else {
         return SocketWrapper (sock);
     }
+}
+
+int SocketWrapper::connect (const sockaddr *addr, socklen_t len) {
+    return ::connect (fd_, addr, len);
 }
 
 int SocketWrapper::bind (const struct sockaddr *addr, socklen_t addr_size) {
