@@ -14,7 +14,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 
-add_executable (server src/main.cc src/SocketWrapper.cc src/HttpMessage.cc)
+add_executable (server src/main.cc src/SocketWrapper.cc src/HttpMessage.cc
+  src/HttpRequest.cc)
 
 target_include_directories(server PRIVATE include)
 
@@ -22,7 +23,7 @@ enable_testing()
 
 
 add_executable (
-    HttpSerialization tests/HttpSerialization.cc src/HttpMessage.cc
+    HttpSerialization tests/HttpSerialization.cc src/HttpMessage.cc src/HttpRequest.cc
 )
 
 

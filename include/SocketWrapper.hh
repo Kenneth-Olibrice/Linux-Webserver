@@ -16,7 +16,6 @@ public:
 
   // Move operators. We may want these in the future, but for now they are deleted.
   SocketWrapper (SocketWrapper &&other);
-  // SocketWrapper &operator= (SocketWrapper &&other) = delete; // TODO: We may want this
 
   ~SocketWrapper () {close (fd_);};
 

@@ -1,14 +1,14 @@
 #include <gtest/gtest.h>
-#include "../include/HttpMessage.hh"
+#include "../include/HttpRequest.hh"
 
 
 // Confirm that the most basic GET request is properly
 // serialized.
 TEST (HttpSerialization, BasicGet) {
-    HttpMessage msg {};
-    msg.set_address ("/");
+    HttpRequest msg {};
+    msg.set_uri ("/");
     msg.set_method (HttpMethod::GET);
-    msg.set_version ("HTTP/1.1");
+    msg.set_version (1, 1);
     msg.set_header ("host", "localhost");
 
     std::string serialized_msg {msg.serialize ()};
