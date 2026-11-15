@@ -4,29 +4,28 @@ Project (Linux-Webserver)
 set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
 # GTest
 include(FetchContent)
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
 )
-
 FetchContent_MakeAvailable(googletest)
 
 
+# Main application executable.
 add_executable (server src/main.cc src/SocketWrapper.cc src/HttpMessage.cc
-  src/HttpRequest.cc)
+  src/HttpRequest.cc
+  src/RequestLineParser.cc)
 
 target_include_directories(server PRIVATE include)
 
+
 enable_testing()
-
-
 add_executable (
-    HttpSerialization tests/HttpSerialization.cc src/HttpMessage.cc src/HttpRequest.cc
+    HttpSerialization tests/HttpSerialization.cc src/HttpMessage.cc src/HttpRequest.cc src/RequestLineParser.cc
 )
-
-
 
 target_link_libraries(
   HttpSerialization

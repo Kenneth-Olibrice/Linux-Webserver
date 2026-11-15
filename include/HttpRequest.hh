@@ -1,3 +1,6 @@
+#ifndef HTTP_REQUEST_HH
+#define HTTP_REQUEST_HH
+
 #include "../include/HttpMessage.hh"
 #include <string_view>
 
@@ -17,3 +20,5 @@ public:
 private:
   struct HttpRequestLine request_line_ {};
 };
+
+#endif

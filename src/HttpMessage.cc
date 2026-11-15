@@ -28,3 +28,12 @@ void HttpMessage::set_version (int major, int minor) {
 HttpMessage::~HttpMessage () {
   // Empty.
 }
+
+// TODO: Implement fully.
+std::optional<HttpMethod> HttpMessage::deserialize_method (string_view data) {
+  if (data == "GET") {
+    return HttpMethod::GET;
+  } else {
+    return nullopt;
+  }
+}

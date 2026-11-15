@@ -31,10 +31,11 @@ class HttpMessage {
 public:
   HttpMessage () = default;
   virtual std::string serialize () const = 0;
-
+  
 
   static std::string serialize_method (const HttpMethod &method);
-  
+  static std::optional<HttpMethod> deserialize_method (std::string_view data);
+
   void set_headers (std::unordered_map<std::string, std::string> headers); // TODO: implement
   void set_body (std::string_view body) {body_ = std::string (body);}
   void set_header (std::string key, std::string value) {headers_[key] = value;}
