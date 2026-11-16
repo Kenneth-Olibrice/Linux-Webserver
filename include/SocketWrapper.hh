@@ -24,8 +24,8 @@ public:
   int listen (int backlog);
   std::optional<SocketWrapper> accept ();
 
-  ssize_t send (std::string_view bytes, int flags);
-  ssize_t recv (std::string buf, size_t bytes, int flags);
+  ssize_t send (std::string_view bytes, int flags) const;
+  ssize_t recv (std::string buf, size_t bytes, int flags) const;
 
 protected:
   explicit SocketWrapper (int sock_fd) : fd_ (sock_fd) {};

@@ -40,6 +40,6 @@ SocketWrapper::SocketWrapper (SocketWrapper &&other) {
     other.fd_ = -1; // Invalidate other file descriptor so it cannot be used anymore.
 }
 
-ssize_t SocketWrapper::send (string_view bytes, int flags) {
+ssize_t SocketWrapper::send (string_view bytes, int flags) const {
     return ::send (fd_, bytes.data (), bytes.size (), flags);
 }

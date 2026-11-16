@@ -22,6 +22,14 @@ add_executable (server src/main.cc src/SocketWrapper.cc src/HttpMessage.cc
 target_include_directories(server PRIVATE include)
 
 
+# Tool executables.
+add_executable (get_root tools/get_root.cc src/SocketWrapper.cc
+                src/HttpMessage.cc src/HttpRequest.cc src/HttpConnection.cc)
+
+target_include_directories(get_root PRIVATE include)
+
+
+# Test executables.
 enable_testing()
 add_executable (
     HttpSerialization tests/HttpSerialization.cc src/HttpMessage.cc src/HttpRequest.cc src/RequestLineParser.cc
