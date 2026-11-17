@@ -19,6 +19,8 @@ struct HttpRequestLine {
 
   std::string uri_ {};
 
+  bool operator== (const HttpRequestLine &other) const = default;
+
 };
 
 struct HttpResponseLine {

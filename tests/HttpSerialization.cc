@@ -1,4 +1,7 @@
 #include <gtest/gtest.h>
+#include <iostream>
+#include <optional>
+
 #include "../include/HttpRequest.hh"
 #include "../include/HttpMessage.hh"
 #include "../include/RequestLineParser.hh"
@@ -18,7 +21,7 @@ TEST (HttpSerialization, BasicGet) {
 }
 
 
-TEST (HttpSerialization, BasicDeserialize) {
+TEST (HttpSerialization, BasicDeserializeMethod) {
     std::string method_get {"GET"};
 
     // According to [RFC 9110], HTTP methods are case sensitive.
@@ -34,4 +37,34 @@ TEST (HttpSerialization, BasicDeserialize) {
     ASSERT_NE (HttpMethod::GET, HttpMessage::deserialize_method (space_get2));
     ASSERT_NE (HttpMethod::GET, HttpMessage::deserialize_method (space_get3));
     ASSERT_EQ (HttpMethod::GET, HttpMessage::deserialize_method (method_get));
+
+    std::cout << "buns" << std::endl;
+}
+
+TEST (HttpSerialziation, DeserializeValid) {
+    std::string request1 = "GET / HTTP/1.1\r\n"
+                           "host:www.youtube.com\r\n"
+                           "header1:value1\r\n"
+                           "header2:value2\r\n"
+                           "content-length:12\r\n"
+                           "\r\n"
+                           "Hello world!";
+
+    HttpRequest correct_deserialized;
+
+    // Correct start-line serialization.
+    correct_deserialized.set_method (HttpMethod::GET);
+    correct_deserialized.set_uri ("/");
+    correct_deserialized.set_version (1,1);
+
+    // Correct headers serialization.
+    correct_deserialized.set_header ("host", "www.youtube.com");
+    correct_deserialized.set_header ("header1", "value1");
+    correct_deserialized.set_header ("header2", "value2");
+    
+    std::optional actual_deserialized = HttpRequest::deserialize (request1);
+
+    ASSERT_TRUE (actual_deserialized.has_value ());
+    // ASSERT_EQ (correct_deserialized, actual_deserialized.value ());
+
 }
